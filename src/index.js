@@ -6,6 +6,11 @@ const app = express();
 const port = 3000;
 app.use(express.json());
 
+app.get("/", async (req, res) => {
+	const quimicos = await prisma.quimicos.findMany();
+	res.json(quimicos);
+});
+
 app.post("/", async (req, res) => {
 	const { nombre, apellidos, quimico, llevaraNiños, niños } = req.body;
 
