@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model invitados {
+  id           Int       @id @default(autoincrement())
+  nombre       String    @db.VarChar(80)
+  apellidos    String    @db.VarChar(80)
+  quimico      Int
+  llevarani_os Boolean   @map("llevaraniños")
+  createdat    DateTime? @default(now()) @db.Timestamptz(6)
+  quimicos     quimicos  @relation(fields: [quimico], references: [id], onUpdate: NoAction)
+  ni_os        ni_os[]
+}
+
+model ni_os {
+  id        Int       @id @default(autoincrement())
+  edad      Int
+  invitado  Int
+  invitados invitados @relation(fields: [invitado], references: [id], onUpdate: NoAction)
+
+  @@map("niños")
+}
+
+model quimicos {
+  id        Int         @id @default(autoincrement())
+  nombre    String?
+  invitados invitados[]
+}
